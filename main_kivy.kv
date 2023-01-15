@@ -1,0 +1,161 @@
+<Button>:
+    font_size: 15
+    size_hint: 0.155, 0.06
+    color: 0, 0, 0, 1
+    background_color: 1, 1, 1, 0.2
+
+<ToggleButton>:
+    font_size: 15
+    size_hint: 0.155, 0.06
+    color: 0, 0, 0, 1
+    background_color: 1, 1, 1, 0.2
+
+MainScreen:
+    Simulator:
+    TableResults:
+
+
+<Simulator>:
+    name: 'screen_1'
+
+    MDFloatLayout:
+        orientation:'vertical'
+        size: root.width, root.height
+
+        Label:
+            id: text_output
+            text: ''
+            halign: 'center'
+            font_size: 25
+            pos_hint: {'center_x': 0.577, 'center_y': 0.7}
+            color: 0, 0, 0, 1
+            markup: True
+
+        TextInput:
+            id: text_input
+            hint_text: 'Type your name here'
+            size_hint: 0.82, 0.07
+            font_size: 25
+            pos_hint: {'center_x': 0.577, 'center_y': 0.28}
+            color: 0, 0, 0, 1
+            multiline: False
+            disabled: not root.choose_enabled
+
+        Button:  # added for background only
+            size_hint: 0.155, 1
+            pos_hint: {'x': 0.0, 'y': 0.0}
+            background_color: 1, 1, 1, 1
+            disabled: root.choose_enabled
+
+        ToggleButton:
+            id: ru_layout
+            text: 'Russian layout'
+            pos_hint: {'x': 0.0, 'y': 0.54}
+
+            on_state: root.choose_layout(self, en_layout)
+            disabled: not root.choose_enabled
+
+        ToggleButton:
+            id: en_layout
+            text: 'English layout'
+            pos_hint: {'x': 0.0, 'y': 0.48}
+
+            on_state: root.choose_layout(self, ru_layout)
+            disabled: not root.choose_enabled
+
+        ToggleButton:
+            id: words
+            text: 'Set of words'
+            pos_hint: {'x': 0.0, 'y': 0.42}
+
+            on_state: root.choose_mode(self, sentences)
+            disabled: not root.choose_enabled
+
+        ToggleButton:
+            id: sentences
+            text: 'Sentences'
+            pos_hint: {'x': 0.0, 'y': 0.36}
+
+            on_state: root.choose_mode(self, words)
+            disabled: not root.choose_enabled
+
+        ToggleButton:
+            id: simple
+            text: 'Simple level'
+            pos_hint: {'x': 0.0, 'y': 0.3}
+
+            on_state: root.choose_level(self, hard)
+            disabled: not root.choose_enabled
+
+        ToggleButton:
+            id: hard
+            text: 'Hard level'
+            pos_hint: {'x': 0.0, 'y': 0.24}
+
+            on_state: root.choose_level(self, simple)
+            disabled: not root.choose_enabled
+
+        Button:
+            id: start
+            text: 'Start'
+            pos_hint: {'x': 0.0, 'y': 0.06}
+
+            disabled: not root.choose_enabled
+            on_release:
+                root.start_typing(self, check, restart, text_output, text_input, ru_layout, en_layout, words, sentences, simple, hard)
+
+        Button:
+            id: check
+            text: 'Check'
+            pos_hint: {'x': 0.0, 'y': 0.18}
+
+            disabled: root.choose_enabled
+            on_release:
+                root.check_text(text_output, text_input, check, result)
+
+        Button:
+            id: result
+            text: 'Get result'
+            pos_hint: {'x': 0.0, 'y': 0.12}
+
+            disabled: root.choose_enabled
+            on_release:
+                root.save_result()
+                root.show_result(text_output, result, restart)
+
+        Button:
+            id: restart
+            text: 'Restart'
+            pos_hint: {'x': 0.0, 'y': 0.0}
+
+            disabled: root.choose_enabled
+            on_release:
+                root.restart_typing(self, text_output, text_input, start, check, result, ru_layout, en_layout, words, sentences, simple, hard)
+
+        Button:
+            text:'Results'
+            pos_hint: {'x': 0.0, 'y': 0.94}
+            on_release:
+                app.root.current = 'screen_2'
+                root.manager.transition.direction = 'left'
+
+
+<TableResults>:
+    name: 'screen_2'
+
+    MDFloatLayout:
+        orientation:'vertical'
+        size: root.width, root.height
+
+        Button:  # added for background only
+            size_hint: 0.155, 1
+            pos_hint: {'x': 0.0, 'y': 0.0}
+            background_color: 1, 1, 1, 1
+            disabled: root.choose_enabled
+
+        Button:
+            text: 'Back'
+            pos_hint: {'x': 0.0, 'y': 0.94}
+            on_release:
+                app.root.current = 'screen_1'
+                root.manager.transition.direction = 'right'
