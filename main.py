@@ -78,6 +78,7 @@ class Simulator(Screen):
     def start_typing(self, start, check, restart, text_output, text_input, ru_layout, en_layout,
                      words, sentences, simple, hard):
         # If User hasn't chosen layout, mode and level, User can't start typing
+        text_output.text = "Select practice mode"
         if ru_layout.state == 'down' or en_layout.state == 'down':
             if words.state == 'down' or sentences.state == 'down':
                 if simple.state == 'down' or hard.state == 'down':
